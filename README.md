@@ -1,53 +1,40 @@
 # Louisiana Precinct and District Mapping
 
-This project processes Louisiana precinct shapefiles and assigns them to multiple political districts, combining geographic data with demographic and voter registration information for analysis and mapping.
+This project takes Louisiana precinct and block shapefiles and links them to multiple political districts. It combines geographic boundaries with demographic and voter registration data, creating a clean dataset that can be used for mapping, analysis, and reporting. The goal is to produce both **centroid-based** and **area-weighted** district assignments, and to identify where the two methods disagree.
 
 ## Overview
 
-The workflow produces **two main datasets** for both blocks and precincts:
-
-1. **Centroid-based assignment** – Assigns districts based on where the centroid of each block or precinct falls.
-2. **Area-weighted assignment** – Assigns districts based on the largest area of overlap with each district.
-
-The project also identifies **discrepancies** between centroid and area-based assignments, which can be used for quality control or further investigation.
+For each block and precinct, two different assignment methods are used. The **centroid-based assignment** determines the district containing the geographic center of the unit, while the **area-weighted assignment** assigns the unit to the district covering the largest portion of its area. Comparing these methods allows us to flag potential discrepancies, which are useful for quality control or edge-case analysis.
 
 ## Data Sources
+
+The project uses a combination of shapefiles and CSVs. Parish (county) boundaries come from the `tigris` R package and reflect the 2024 boundaries. Precinct shapefiles (VTDs) are from the Louisiana Redistricting Portal (2026), while census blocks are from the same portal (2025). Congressional districts are from TIGER/Line 2025, and state legislative districts come from either `tigris::state_legislative_districts` or local shapefiles, covering both the upper (Senate) and lower (House) chambers. Public Service Commission districts are based on the 2023 plan from the Louisiana Redistricting Portal, and Supreme Court districts are from the 2024 plan. Finally, CSV files provide block-to-precinct equivalency and voting data.  
 
 | Layer | Source | Notes |
 |-------|--------|-------|
 | **Parishes (Counties)** | `tigris` R package | 2024 boundaries |
-| **Precincts (VTDs)** | [Louisiana Redistricting Portal](https://redist.legis.la.gov/default_ShapeFiles2020) | 2025 shapefiles |
+| **Precincts (VTDs)** | [Louisiana Redistricting Portal](https://redist.legis.la.gov/default_ShapeFiles2020) | 2026 shapefiles |
+| **Census Blocks** | [Louisiana Redistricting Portal](https://redist.legis.la.gov/default_ShapeFiles2020) | 2025 shapefiles |
 | **Congressional Districts** | [TIGER/Line 2025](https://www2.census.gov/geo/tiger/TIGER2025/CD/) | 2025 boundaries |
-| **State Senate & House** | `tigris::state_legislative_districts` | 2025 boundaries |
+| **State Senate & House** | `tigris::state_legislative_districts` or shapefiles | 2025 boundaries |
 | **Public Service Commission** | [Redistricting Portal PSC](https://redist.legis.la.gov/2023_07/2023PSE) | 2023 plan |
 | **Louisiana Supreme Court** | [Redistricting Portal LASC](https://redist.legis.la.gov/2024_Files/2024LASSCAct7) | 2024 plan |
-| **Block/Precinct Equivalency** | [Redistricting CSV](https://redist.legis.la.gov/2025%201RS/BlockEqu/LA_2025_12_VTD_DATA.txt) | Links census blocks to precincts |
+| **Block/Precinct Equivalency** | [Redistricting CSV](https://redist.legis.la.gov/2025%201RS/BlockEqu/LA_2025_12_VTD_DATA.txt) | Links blocks or precincts to voting data |
 
 ## Workflow
 
-1. **Load shapefiles and data**
-   - Parish, precinct, block, and district shapefiles.
-   - Voter registration and demographic CSVs.
-2. **Standardize CRS and geometry**
-   - Transform all layers to **planar CRS EPSG:3452**.
-   - Validate geometries and apply `st_buffer(0)` to fix topology issues.
-3. **Centroid-based district assignment**
-   - Calculate centroids with `st_point_on_surface()`.
-   - Assign districts using `st_within()` spatial joins.
-4. **Area-weighted district assignment**
-   - Compute `st_intersection()` between precincts/blocks and district layers.
-   - Assign each unit to the district with the largest overlapping area.
-5. **Merge demographic and voter registration data**
-   - Join block/precinct-level population and registration variables.
-6. **Identify discrepancies**
-   - Compare centroid vs. area-weighted assignments.
-   - Flag mismatches for review.
+The workflow begins by loading all shapefiles and CSVs, including parishes, precincts, blocks, and districts for congressional, state legislative, PSC, and Supreme Court boundaries. All layers are transformed to a planar coordinate reference system (EPSG:3452) and validated to fix any geometry issues.
+
+Next, districts are assigned to each unit in two ways. The centroid-based approach calculates a centroid for each block or precinct and assigns the unit to the district containing that point. The area-weighted approach computes the geometric intersection with all overlapping districts and assigns the unit to the district covering the largest area. After assigning districts, demographic and voter registration data are merged with each unit to create a comprehensive dataset.
+
+Finally, discrepancies between centroid-based and area-weighted assignments are identified. These discrepancies highlight units where the two methods disagree, which can indicate boundary edge cases or unusual shapes.
 
 ## Output
 
-- `precinct_data.RData`  
-  Contains `precincts_clean_centroid` and `precincts_clean_area`.
-- `block_data.RData`  
-  Contains `blocks_clean_centroid` and `blocks_clean_area`.
-- `discrepancies` data frames  
-  For both blocks and precincts, highlighting units with differing centroid and area-based assignments.
+The final output includes four main datasets:
+
+- `precinct_data.RData`, containing both `precincts_clean_centroid` and `precincts_clean_area`.
+- `block_data.RData`, containing both `blocks_clean_centroid` and `blocks_clean_area`.
+- Discrepancy tables for blocks and precincts, showing units where centroid and area-based assignments differ.  
+
+These datasets provide a ready-to-use foundation for mapping, analysis, or further redistricting research.
