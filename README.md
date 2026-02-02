@@ -6,8 +6,8 @@ This project processes Louisiana precinct shapefiles and assigns them to multipl
 
 The workflow produces **two main datasets** for both blocks and precincts:
 
-1. **Centroid-based assignment (`_clean_centroid`)** – Assigns districts based on where the centroid of each block or precinct falls.
-2. **Area-weighted assignment (`_clean_area`)** – Assigns districts based on the largest area of overlap with each district.
+1. **Centroid-based assignment** – Assigns districts based on where the centroid of each block or precinct falls.
+2. **Area-weighted assignment** – Assigns districts based on the largest area of overlap with each district.
 
 The project also identifies **discrepancies** between centroid and area-based assignments, which can be used for quality control or further investigation.
 
