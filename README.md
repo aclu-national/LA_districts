@@ -69,7 +69,7 @@ When multiple district types are selected, the application:
 │   │   └── block_mapping.R       # Block-level processing
 │   ├── data/
 │   │   ├── shapemaps/            # District shapefiles
-│   │   └── voting_data/          # Voter registration CSVs
+│   │   └── voting_data/          # Voter registration .txts's
 │   └── master_script.R           # Main processing pipeline
 ├── shiny/
 │   ├── app.R                     # Shiny application
