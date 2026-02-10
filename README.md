@@ -66,8 +66,7 @@ When multiple district types are selected, the application:
 ├── data_processing/
 │   ├── scripts/
 │   │   ├── precinct_mapping.R    # Precinct-level processing
-│   │   ├── block_mapping.R       # Block-level processing
-│   │   └── save_data.R           # Data export and compression
+│   │   └── block_mapping.R       # Block-level processing
 │   ├── data/
 │   │   ├── shapemaps/            # District shapefiles
 │   │   └── voting_data/          # Voter registration CSVs
