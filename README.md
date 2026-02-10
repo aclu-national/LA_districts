@@ -79,6 +79,7 @@ When multiple district types are selected, the application:
 │   └── www/                      # Fonts, CSS, images
 └── README.md
 ```
+**NOTE:** We did not include all raw or cleaned data, as the files are too large.
 
 ## Output Datasets
 
