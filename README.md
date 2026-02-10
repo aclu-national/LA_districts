@@ -1,40 +1,103 @@
-# Louisiana Precinct and District Mapping
+# Louisiana District Intersections Tool
 
-This project takes Louisiana precinct and block shapefiles and links them to multiple political districts. It combines geographic boundaries with demographic and voter registration data, creating a clean dataset that can be used for mapping, analysis, and reporting. The goal is to produce both **centroid-based** and **area-weighted** district assignments, and to identify where the two methods disagree.
+An interactive web application for exploring Louisiana's electoral districts and their demographic composition. This tool enables researchers, advocates, and policymakers to visualize and analyze how different political district boundaries overlap and intersect, with detailed demographic and voter registration data.
 
 ## Overview
 
-For each block and precinct, two different assignment methods are used. The **centroid-based assignment** determines the district containing the geographic center of the unit, while the **area-weighted assignment** assigns the unit to the district covering the largest portion of its area. Comparing these methods allows us to flag potential discrepancies, which are useful for quality control or edge-case analysis.
+This project processes Louisiana precinct and census block shapefiles to create a comprehensive mapping of political districts across multiple levels of government. Users can interactively select any combination of district types (Congressional, State Senate, State House, Public Service Commission, Supreme Court) to see their intersections and examine the demographic makeup of these overlapping areas.
+
+The tool implements two district assignment methods—**centroid-based** and **area-weighted**—and compares their results to ensure accuracy. After analysis, the area-weighted method was selected as optimal for the application.
+
+## Features
+
+### Interactive Web Application
+- **Dynamic district intersection**: Select multiple district types to see how they overlap
+- **Dual visualizations**: 
+  - Distinct colors for visual clarity
+  - Data variable mapping (demographics, registration) with gradient coloring
+- **Address and district search**: Find specific locations or zoom to particular districts
+- **Detailed breakdowns**: Click any region for comprehensive statistics, including:
+  - Precinct-level partisan mapping
+  - Party registration charts
+  - Demographic composition
+  - District vs. statewide comparisons
+- **Full data access**: Browse and download complete datasets as CSV
 
 ## Data Sources
 
-The project uses a combination of shapefiles and CSVs. Parish (county) boundaries come from the `tigris` R package and reflect the 2024 boundaries. Precinct shapefiles (VTDs) are from the Louisiana Redistricting Portal (2026), while census blocks are from the same portal (2025). Congressional districts are from TIGER/Line 2025, and state legislative districts come from either `tigris::state_legislative_districts` or local shapefiles, covering both the upper (Senate) and lower (House) chambers. Public Service Commission districts are based on the 2023 plan from the Louisiana Redistricting Portal, and Supreme Court districts are from the 2024 plan. Finally, CSV files provide block-to-precinct equivalency and voting data.  
+| Layer | Source | Year |
+|-------|--------|------|
+| **Parishes (Counties)** | `tigris` R package | 2024 |
+| **Precincts** | [LA Redistricting Portal](https://redist.legis.la.gov/default_ShapeFiles2020) | 2026 |
+| **Census Blocks** | [LA Redistricting Portal](https://redist.legis.la.gov/default_ShapeFiles2020) | 2025 |
+| **Congressional Districts** | [Census TIGER/Line](https://www2.census.gov/geo/tiger/TIGER2025/CD/) | 2025 |
+| **State Senate** | [Census TIGER/Line](https://www2.census.gov/geo/tiger/TIGER2025/SLDU/) | 2025 |
+| **State House** | [Census TIGER/Line](https://www2.census.gov/geo/tiger/TIGER2025/SLDL/) | 2025 |
+| **Public Service Commission** | [LA Redistricting Portal](https://redist.legis.la.gov/2023_07/2023PSE) | 2023 |
+| **Supreme Court Districts** | [LA Redistricting Portal](https://redist.legis.la.gov/2024_Files/2024LASSCAct7) | 2024 |
+| **Voter Registration Data** | LA Redistricting Portal | 2026 |
 
-| Layer | Source | Notes |
-|-------|--------|-------|
-| **Parishes (Counties)** | `tigris` R package | 2024 boundaries |
-| **Precincts (VTDs)** | [Louisiana Redistricting Portal](https://redist.legis.la.gov/default_ShapeFiles2020) | 2026 shapefiles |
-| **Census Blocks** | [Louisiana Redistricting Portal](https://redist.legis.la.gov/default_ShapeFiles2020) | 2025 shapefiles |
-| **Congressional Districts** | [TIGER/Line 2025](https://www2.census.gov/geo/tiger/TIGER2025/CD/) | 2025 boundaries |
-| **State Senate & House** | `tigris::state_legislative_districts` or shapefiles | 2025 boundaries |
-| **Public Service Commission** | [Redistricting Portal PSC](https://redist.legis.la.gov/2023_07/2023PSE) | 2023 plan |
-| **Louisiana Supreme Court** | [Redistricting Portal LASC](https://redist.legis.la.gov/2024_Files/2024LASSCAct7) | 2024 plan |
-| **Block/Precinct Equivalency** | [Redistricting CSV](https://redist.legis.la.gov/2025%201RS/BlockEqu/LA_2025_12_VTD_DATA.txt) | Links blocks or precincts to voting data |
+## Methodology
 
-## Workflow
+### Geographic Processing
+1. **Projection**: All spatial data transformed to Louisiana State Plane South (EPSG:3452) for accurate area calculations
+2. **Validation**: Geometries validated using `st_make_valid()` to ensure clean spatial operations
+3. **Assignment Method Selection**: 
+   - Centroid-based: Assigns units based on geometric center location
+   - Area-weighted: Assigns based on the largest geographic overlap
+   - **Finding**: Both methods produced identical results except for one precinct
+   - **Decision**: Area-weighted selected as it better handles boundary-spanning units
 
-The workflow begins by loading all shapefiles and CSVs, including parishes, precincts, blocks, and districts for congressional, state legislative, PSC, and Supreme Court boundaries. All layers are transformed to a planar coordinate reference system (EPSG:3452) and validated to fix any geometry issues.
+### Data Aggregation
+When multiple district types are selected, the application:
+1. Identifies all unique intersections between selected districts
+2. Groups precincts by district combinations
+3. Aggregates demographic and registration data to intersection areas
+4. Recalculates percentages based on aggregated totals
+5. Creates unified geometries from spatial unions
 
-Next, districts are assigned to each unit in two ways. The centroid-based approach calculates a centroid for each block or precinct and assigns the unit to the district containing that point. The area-weighted approach computes the geometric intersection with all overlapping districts and assigns the unit to the district covering the largest area. After assigning districts, demographic and voter registration data are merged with each unit to create a comprehensive dataset.
+### Performance Optimization
+- Geometries simplified to 10% of the original detail using `rmapshaper` for web display
+- Data compressed using `xz` compression for faster loading
+- Both full and simplified datasets maintained for analysis vs. display
 
-Finally, discrepancies between centroid-based and area-weighted assignments are identified. These discrepancies highlight units where the two methods disagree, which can indicate boundary edge cases or unusual shapes.
+## Project Structure
+```
+├── data_processing/
+│   ├── scripts/
+│   │   ├── precinct_mapping.R    # Precinct-level processing
+│   │   ├── block_mapping.R       # Block-level processing
+│   │   └── save_data.R           # Data export and compression
+│   ├── data/
+│   │   ├── shapemaps/            # District shapefiles
+│   │   └── voting_data/          # Voter registration CSVs
+│   └── master_script.R           # Main processing pipeline
+├── shiny/
+│   ├── app.R                     # Shiny application
+│   ├── clean_data/               # Processed datasets
+│   └── www/                      # Fonts, CSS, images
+└── README.md
+```
 
-## Output
+## Output Datasets
 
-The final output includes four main datasets:
+The processing pipeline generates eight datasets:
 
-- `precinct_data.RData`, containing both `precincts_clean_centroid` and `precincts_clean_area`.
-- `block_data.RData`, containing both `blocks_clean_centroid` and `blocks_clean_area`.
-- Discrepancy tables for blocks and precincts, showing units where centroid and area-based assignments differ.  
+**Precinct-level** (selected for application):
+- `precinct_centroid_data.RData` / `precinct_centroid_data_simple.RData`
+- `precinct_area_data.RData` / `precinct_area_data_simple.RData`
 
-These datasets provide a ready-to-use foundation for mapping, analysis, or further redistricting research.
+**Block-level** (available for alternative analysis):
+- `block_centroid_data.RData` / `block_centroid_data_simple.RData`
+- `block_area_data.RData` / `block_area_data_simple.RData`
+
+Each dataset includes:
+- District assignments (Congressional, Senate, House, PSC, Supreme Court)
+- Total population and racial/ethnic breakdowns
+- Voting age population (VAP) statistics
+- Voter registration by party and demographics
+- Spatial geometries (full resolution and simplified)
+
+## Contact
+
+Developed by the ACLU of Louisiana. For questions or feedback, contact: eappelson@laaclu.org
