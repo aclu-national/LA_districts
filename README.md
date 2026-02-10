@@ -2,6 +2,8 @@
 
 An interactive web application for exploring Louisiana's electoral districts and their demographic composition. This tool enables researchers, advocates, and policymakers to visualize and analyze how different political district boundaries overlap and intersect, with detailed demographic and voter registration data.
 
+![Intersections](intersections.png)
+
 ## Overview
 
 This project processes Louisiana precinct and census block shapefiles to create a comprehensive mapping of political districts across multiple levels of government. Users can interactively select any combination of district types (Congressional, State Senate, State House, Public Service Commission, Supreme Court) to see their intersections and examine the demographic makeup of these overlapping areas.
