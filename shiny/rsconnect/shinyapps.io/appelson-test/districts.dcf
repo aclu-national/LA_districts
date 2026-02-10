@@ -1,0 +1,13 @@
+name: districts
+title: districts
+username: appelson-test
+account: appelson-test
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 16593675
+bundleId: 11564661
+url: https://appelson-test.shinyapps.io/districts/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: clean_data/block_area_data.RData|clean_data/block_centroid_data.RData|clean_data/precinct_area_data.RData|clean_data/precinct_centroid_data.RData|server.R|ui.R|www/script.js
