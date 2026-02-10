@@ -4,6 +4,7 @@ An interactive web application for exploring Louisiana's electoral districts and
 
 ![Intersections](intersections.png)
 
+
 ## Overview
 
 This project processes Louisiana precinct and census block shapefiles to create a comprehensive mapping of political districts across multiple levels of government. Users can interactively select any combination of district types (Congressional, State Senate, State House, Public Service Commission, Supreme Court) to see their intersections and examine the demographic makeup of these overlapping areas.
@@ -103,3 +104,11 @@ Each dataset includes:
 ## Contact
 
 Developed by the ACLU of Louisiana. For questions or feedback, contact: eappelson@laaclu.org
+
+-------
+
+**Next Steps:** 
+1) Making mobile-friendly.
+2) Optimizing the code to load faster.
+
+
