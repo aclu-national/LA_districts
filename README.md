@@ -107,8 +107,8 @@ Developed by the ACLU of Louisiana. For questions or feedback, contact: eappelso
 
 -------
 
-**Next Steps:** 
-1) Making mobile-friendly.
-2) Optimizing the code to load faster.
+## Next Steps:
+[] Making mobile-friendly.
+[] Optimizing the code to load faster.
 
 
