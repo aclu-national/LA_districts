@@ -15,6 +15,9 @@ library(rmarkdown)
 library(highcharter)
 library(rmapshaper)
 library(smoothr)
+library(lwgeom)
+library(waiter)
+library(metathis)
 
 # --------------------------- FONT SETUP -----------------------------
 
@@ -33,7 +36,7 @@ showtext_opts(dpi = 96)
 
 # --------------------------- DATA LOADING ---------------------------
 
-load("clean_data/precincts_clean_area.RData")
+load("precincts_clean_area.RData")
 precincts_data <- precincts_clean_area %>%
   st_snap_to_grid(size = 0.00001) %>%
   st_make_valid()
@@ -292,11 +295,33 @@ column_renames <- c(
 # ----------------------------- SHINY UI -----------------------------
 
 ui <- fluidPage(
-  
+
+  useWaiter(),
   useShinyjs(),
   
   # External CSS/JS libraries and custom stylesheet
   tags$head(
+    tags$title("Louisiana District Intersections | ACLU of Louisiana"),
+    
+    # Favicon (the little icon in the tab)
+    tags$link(rel = "shortcut icon", href = "https://aclujusticelab.org/wp-content/themes/aclu-la-justice-lab/assets/images/favicon-16x16.png"),
+    tags$link(rel = "icon", type = "image/x-icon", href = "https://aclujusticelab.org/wp-content/themes/aclu-la-justice-lab/assets/images/favicon-16x16.png"),
+    
+    # Open Graph / social sharing meta tags
+    tags$meta(property = "og:title", content = "Louisiana District Intersections"),
+    tags$meta(property = "og:description", content = "Intersect districts, get breakdowns, download answers"),
+    tags$meta(property = "og:image", content = "https://www.aclujusticelab.org/wp-content/uploads/2020/12/ACLULA_JusticeLabStyleGuide-02.png"),
+    tags$meta(property = "og:url", content = "https://laaclu.shinyapps.io/districts/"),
+    tags$meta(property = "og:type", content = "website"),
+    tags$meta(property = "og:author", content = "Elijah Appelson"),
+    
+    # Twitter card meta tags
+    tags$meta(name = "twitter:card", content = "summary_large_image"),
+    tags$meta(name = "twitter:title", content = "Louisiana District Intersections | ACLU of Louisiana"),
+    tags$meta(name = "twitter:description", content = "Intersect districts, get breakdowns, download answers"),
+    tags$meta(name = "twitter:image", content = "https://www.aclujusticelab.org/wp-content/uploads/2020/12/ACLULA_JusticeLabStyleGuide-02.png"),
+    
+    
     tags$link(
       rel = "stylesheet",
       href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
