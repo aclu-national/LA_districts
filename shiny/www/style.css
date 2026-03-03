@@ -952,3 +952,48 @@ table.dataTable tbody td {
     width: auto;
     display: block;
 }
+
+
+/* ======================= EXTRA ========================== */
+.info.legend {
+        font-family: 'Century-Schoolbook', serif;
+        font-size: 13px;
+        color: #333;
+      }
+      
+      /* A/B Tool Styles */
+      .ab-sec-label {
+        font-family: 'GT-America-Compressed-Bold', sans-serif;
+        font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+        color: #0d47a1; margin: 0 0 8px; padding-bottom: 4px;
+        border-bottom: 2px solid #e8f0fe;
+      }
+      .ab-district-sep { text-align: center; color: #bbb; font-size: 20px; margin: 8px 0; }
+      .ab-find-btn {
+        width: 100%; background: #0d47a1; color: white; border: none;
+        border-radius: 6px; padding: 10px 0; cursor: pointer; margin-top: 4px;
+        font-family: 'GT-America-Compressed-Bold', sans-serif;
+        font-size: 14px; letter-spacing: 1px; transition: background 0.2s;
+      }
+      .ab-find-btn:hover { background: #1565c0; }
+      .ab-hint { font-size: 11px; color: #aaa; font-style: italic; margin: 5px 0 0; }
+      .ab-status-msg { border-radius: 6px; padding: 10px 12px; font-size: 12px; margin-bottom: 14px; line-height: 1.5; }
+      .ab-status-ok   { background: #e8f5e9; border: 1px solid #81c784; color: #2e7d32; }
+      .ab-status-warn { background: #fff8e1; border: 1px solid #ffd54f; color: #6d4c00; }
+      .ab-status-info { background: #e3f2fd; border: 1px solid #90caf9; color: #0d47a1; }
+      .zone-card { margin-bottom: 16px; border-radius: 7px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.08); background:#fff; }
+      .zone-card-header {
+        padding: 9px 13px; color: white; font-family: 'GT-America-Compressed-Bold', sans-serif;
+        font-size: 13px; letter-spacing: 0.3px; line-height: 1.4;
+      }
+      .zone-card-header small { display: block; font-weight: normal; font-size: 11px; opacity: 0.8; margin-top: 1px; }
+      .hdr-int  { background: #800080; } /* Purple for intersection */
+      .hdr-a    { background: #0d47a1; } /* Blue for A */
+      .hdr-b    { background: #b71c1c; } /* Red for B */
+      .zone-card-body { border: 1px solid #e8eaed; border-top: none; border-radius: 0 0 7px 7px; }
+      .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 13px; font-size: 13px; border-bottom: 1px solid #f2f3f5; }
+      .stat-row:last-child { border-bottom: none; }
+      .stat-row:nth-child(even) { background: #fafbfc; }
+      .stat-lbl { color: #777; }
+      .stat-val { font-family: 'GT-America-Compressed-Bold', sans-serif; color: #1a1a1a; }
+      .stat-na  { color: #ccc; font-style: italic; font-size: 12px; }
