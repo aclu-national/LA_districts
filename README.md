@@ -2,7 +2,7 @@
 
 An interactive web application for exploring Louisiana's electoral districts and their demographic composition. This tool enables researchers, advocates, and policymakers to visualize and analyze how different political district boundaries overlap and intersect, with detailed demographic and voter registration data.
 
-![Intersections](intersections.png)
+![Intersections](images/intersections.png)
 
 
 ## Overview
