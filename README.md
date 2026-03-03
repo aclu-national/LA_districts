@@ -2,8 +2,6 @@
 
 An interactive R Shiny web application built by the **ACLU of Louisiana** for exploring how Louisiana's political districts overlap, and what those overlapping areas look like demographically and politically.
 
-**Live App**: [laaclu.shinyapps.io/districts](https://laaclu.shinyapps.io/districts/)
-
 ![Intersections](images/image.png)
 
 ---
